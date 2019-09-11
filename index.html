@@ -73,7 +73,7 @@
                                 <table id="sudoku">
                                     <tbody>
                                         <tr v-for="num in numeros">
-                                            <td v-for="n in num"><input disabled type="text" :value="n" /></td>
+                                            <td :id="n" v-for="n in num"><input disabled type="text" :value="n" /></td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -3,7 +3,7 @@ const app = new Vue({
   data: {
     titulo: "Cuadro Magico",
     numeros: [],
-    tamaño: null,
+    tamaño: 3,
     suma: 0,
     integrantes: [
       "Adolfo Esteban Alvarez Pacheco",
@@ -86,6 +86,18 @@ const app = new Vue({
         }
       }
       this.suma = (this.tamaño*(this.tamaño*this.tamaño + 1))/2
+      let number = 1
+      let t = setInterval(() => {
+        $('#' + number).fadeOut()
+        $('#' + number).fadeIn()
+        //$('#' + number).attr('style', 'background-color: red')
+        number++
+        if (number === this.tamaño*this.tamaño + 1) {
+          clearTimeout(t)
+          console.log(number)
+      }
+      }, 1000);
+      
     }
   }
 });
