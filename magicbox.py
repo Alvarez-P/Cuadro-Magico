@@ -1,11 +1,10 @@
 #!/usr/bin/python
-# -- coding: utf-8 --
-import time, os
-
-
+# -*- coding: utf-8 -*-
+ 
 def magico_impar(n):
+    # Método Siamés -- 1691 Simón de la Loubere
     i = 0
-    j = int(int(n)/2)
+    j = int(n/2)
     contador = 1
     arreglo = [0]*n
  
@@ -16,9 +15,6 @@ def magico_impar(n):
     x = (n*n)
  
     while(contador < x):
-        for p in arreglo:
-            print(p)
-
         if((i-1)>=0):
             if((j+1)<(n)):
                 if(arreglo[i-1][j+1]==0):
@@ -55,15 +51,9 @@ def magico_impar(n):
                 i += 1
                 contador += 1
                 arreglo[i][j] = contador
-
-        time.sleep(1)    
-        os.system("clear")  
+ 
     for p in arreglo:
-         print(p)
-   
-
-if __name__ == "__main__":
-   tamaño = int(input('Dimension del cuadro: ')) 
-   os.system("clear")  
-   time.sleep(1) 
-   magico_impar(tamaño)
+        print(p)
+    return arreglo
+n = int(input("Numero de filas y columnas: "))
+x=magico_impar(n)

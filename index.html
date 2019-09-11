@@ -1,63 +1,148 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html class="no-js" lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
-    <title>Cuadro Magico</title>
+    <meta charset="utf-8">
+    <meta name="robots" content="index,follow">
+    <meta name="author" content="Petr Kessler">
+    <title>Simplex calculator online</title>
+    <link rel="shortcut icon" href="/favicon.ico?1391295388">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://simplex.tode.cz/en/">
+    <meta property="og:title" content="Simplex calculator">
+    <meta property="og:image" content="http://simplex.tode.cz/img/og.png">
+    <meta property="fb:admins" content="100004305900429">
+    <meta property="fb:app_id" content="444864038974302">
+    <link rel="stylesheet" media="screen" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/webtemp/css/cssloader-500e3df1badf.css?1391641589">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
 </head>
 
-<body class="container">
-    <div class='app jumbotron'>
-        <h2>{{ titulo }}</h2>
-        <div class="input-group">
-            <input type="text" placeholder="Dimension del cuadro" v-model="tamaño" class="form-control" @keyup.enter="obtenerCuadro">
-            <span class="input-group-btn">
-                <button type="button" @click="obtenerCuadro" class="btn btn-primary agregar">Calcular</button>
-            </span>
+<body>
+    <style>
+        /* with css reset */
+        * {
+            box-sizing: border-box;
+        }
+
+        table {
+            margin: 10px;
+        }
+
+        td {
+            border: 1px solid lightgrey;
+            height: 40px;
+            width: 40px;
+        }
+
+        input {
+            padding: 0;
+            text-align: center;
+            border: 0;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+        }
+
+        input:hover {
+            background: #eee;
+        }
+    </style>
+    <div class="container app">
+        <div class="page-header">
+            <h1> <a>Magic Box calculator</a> </h1>
         </div>
-        <ul class="list-group">
-                <li class="list-group-item" v-for="(num, indice) in numeros">
-                    <span v-for="n in num">
-                    <a>&nbsp {{ n }} &nbsp</a>
-                    </span>
-                </li>
-        </ul>
-        <div class="container">
-            <div class="row">
-                <div class="jumbotron col-md-6">
-                    <h3>Integrantes</h3>
-                    <hr>
-                    <p v-for="integrante in integrantes">
-                        {{ integrante }}
+        <div id="snippet--flashes"> </div>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div id="snippet-simplexForm-">
+
+                    <form id="frm-simplexForm-form" class="form-horizontal task ajax">
+                        <div class="form-group">
+                            <div class="col-sm-6 text-right control-label"> <label
+                                    for="frm-simplexForm-form-var_count">Número de filas y columnas:</label> </div>
+                            <div class="col-sm-2">
+                                <input name="var_count" type="number" min="3" v-model="tamaño" class="form-control"
+                                    @keyup.enter="obtenerCuadro" id="frm-simplexForm-form-var_count" required
+                                    data-nette-rules='[{"op":":filled","msg":"Please provide the number of variables."},{"op":":integer","msg":"Number of variables must be an integer."},{"op":":range","msg":"Number of variables must be between 2 and 32.","arg":[2,32]}]'
+                                    value="" class="form-control number" autofocus> </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-5"> <input type="submit" @click.prevent="obtenerCuadro" name="load"
+                                    id="frm-simplexForm-form-load" value="Calcular ►" formnovalidate
+                                    data-nette-validation-scope='["var_count"]'
+                                    class="btn btn-primary btn-sm btn-block">
+                            </div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-10">
+                                <table id="sudoku">
+                                    <tbody>
+                                        <tr v-for="num in numeros">
+                                            <td v-for="n in num"><input disabled type="text" :value="n" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="text-left"><em><strong>SUMA</strong>: {{sum}}</em>
                     </p>
+                    <h3><a target="_blank" href="http://grapevine.net.au/~grunwald/une/KLAs/maths/magic3x3.html">Método
+                            Siamés
+                            -- 1691 Simón de la Loubere</a></h3>
+                    <div class="node-content">
+                        <p>Este m&eacute;todo o algoritmo funciona para construir cuadrados m&aacute;gicos normales
+                            <em>n x n</em> cuando <em>n</em> es impar. Tambi&eacute;n se le llama algoritmo de
+                            <em>Loubere</em>
+                            o m&eacute;todo de la escalera.<br />
+                            <br />
+                            Paso 1: Poner el 1 en el centro de la primera fila.<br />
+                            Paso 2: Escribir los siguientes enteros sucesivos en la casilla siguiente hacia arriba sobre
+                            la diagonal del reci&eacute;n colocado, con las siguientes excepciones:</p>
+                        <ul>
+                            <li>si se sale del cuadrado entonces colocarlo en el extremo opuesto de la l&iacute;nea
+                                sobre la que se colocar&iacute;a si no hubiera l&iacute;mites de las filas y columnas;
+                            </li>
+                            <li>si el lugar ya est&aacute; ocupado entonces ponerlo justo abajo del reci&eacute;n
+                                colocado.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="jumbotron col-md-6">
-                    <br>
-                    <img class="rounded float-right" :src="logo" alt="" height="200">
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Módulo: Simulación 5SA ISC</h3>
+                        <hr />
+                        <ul>
+
+                            <li v-for="integrante in integrantes">
+                                {{ integrante }}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+        <hr>
+        <div class="footer">
+            <p class="pull-right"> Instituto Tecnológico de Mérida <span class="glyphicon glyphicon-heart"></span>
+            </p>
+            <ul class="list-inline">
+                <li> <a href="https://github.com/RaulNovelo/Cuadro-Magico" target="_blank"> <span
+                            class="glyphicon glyphicon-play-circle"></span> GitHub </a> </li>
+
+            </ul>
+        </div>
     </div>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webtemp/js/jsloader-4115fd737af1.js?1391295416"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="vue.js"></script>
-   
 </body>
 
 </html>
